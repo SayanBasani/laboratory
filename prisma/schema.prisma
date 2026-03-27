@@ -20,3 +20,39 @@ model User {
   email    String @unique
   password String
 }
+
+model Patient {
+  id    Int     @id @default(autoincrement())
+  name  String
+  age   Int
+  gender String
+  phone String
+  address String
+}
+
+model Doctor {
+  id             Int      @id @default(autoincrement())
+  name           String
+  specialization String
+  phone          String
+  email          String?
+  availability   String?
+  experience     Int? 
+  isActive       Boolean   @default(true)
+  consultationFee Float?
+  createdAt      DateTime @default(now())
+
+  appointments   Appointment[]
+}
+
+model Appointment {
+  id        Int      @id @default(autoincrement())
+
+  patientId Int
+  doctorId  Int
+
+  problem   String
+  date      DateTime @default(now())
+
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+}
