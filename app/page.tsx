@@ -45,8 +45,13 @@ export default function Home() {
 
         <div className="flex justify-center gap-4">
           <Link href="/patient/registation">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
               Register Patient
+            </Button>
+          </Link>
+          <Link href="/doctor/registation">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
+              Register Doctor
             </Button>
           </Link>
           <Button variant="outline">
@@ -58,12 +63,14 @@ export default function Home() {
       {/* QUICK ACTIONS */}
       <section className="grid md:grid-cols-4 gap-6 px-10 pb-20">
         
-        <Card className="bg-gray-100 dark:bg-slate-900 hover:scale-105 transition">
-          <CardContent className="p-6 text-center">
-            <UserPlus className="mx-auto mb-4" />
-            <h3 className="text-lg font-semibold">New Patient</h3>
-          </CardContent>
-        </Card>
+        <Link href={'/patient/registation'}>
+          <Card className="bg-gray-100 dark:bg-slate-900 hover:scale-105 transition">
+            <CardContent className="p-6 text-center">
+              <UserPlus className="mx-auto mb-4" />
+              <h3 className="text-lg font-semibold">New Patient</h3>
+            </CardContent>
+          </Card>
+        </Link>
 
         <Card className="bg-gray-100 dark:bg-slate-900 hover:scale-105 transition">
           <CardContent className="p-6 text-center">
