@@ -38,7 +38,7 @@ export default function AppointmentPage() {
       try {
         const res = await fetch("/api/doctors");
         const data = await res.json();
-        setDoctors(data);
+        setDoctors(data.doctors);
       } catch (err) {
         console.error("Failed to fetch doctors");
       } finally {

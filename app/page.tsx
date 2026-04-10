@@ -1,21 +1,5 @@
-// async function getUsers() {
-//   const res = await fetch('http://localhost:3000/api/users');
-//   return res.json();
-// }
-
-// export default async function Home() {
-//   const users = await getUsers();
-
-//   return (
-//     <div>
-//       <h1>Users</h1>
-//       {users.map((user: any) => (
-//         <p key={user.id}>{user.name}</p>
-//       ))}
-//     </div>
-//   );
-// }
-
+// Helping link of gpt gmail sayanbasani1
+// https://chatgpt.com/c/69c4b5f8-bb20-8320-985d-7786076bb66a
 
 // app/page.tsx
 import { Button } from "@/components/ui/button";
@@ -92,6 +76,25 @@ export default function Home() {
             <h3 className="text-lg font-semibold">Reports</h3>
           </CardContent>
         </Card>
+        
+        <Link href={'/patient/list'}>
+          <Card className="bg-gray-100 dark:bg-slate-900 hover:scale-105 transition">
+            <CardContent className="p-6 text-center">
+              <FileText className="mx-auto mb-4" />
+              <h3 className="text-lg font-semibold">Patient List</h3>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href={'/doctor/list'}>
+          <Card className="bg-gray-100 dark:bg-slate-900 hover:scale-105 transition">
+            <CardContent className="p-6 text-center">
+              <FileText className="mx-auto mb-4" />
+              <h3 className="text-lg font-semibold">Doctor List</h3>
+            </CardContent>
+          </Card>
+        </Link>
+
 
       </section>
 

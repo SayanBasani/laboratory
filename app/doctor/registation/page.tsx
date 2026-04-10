@@ -37,8 +37,9 @@ export default function DoctorRegister() {
   const isActive = watch("isActive");
 
   const onSubmit = async (data: FormData) => {
+    console.log(data);
     try {
-      const res = await fetch("/api/doctors", {
+      const res = await fetch("/api/doctors/registation", {
         method: "POST",
         body: JSON.stringify(data),
       });
