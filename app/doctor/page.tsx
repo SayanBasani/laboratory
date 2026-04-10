@@ -20,13 +20,13 @@ export default function DoctorListPage() {
   const [filtered, setFiltered] = useState<Doctor[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // Fetch doctors
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const res = await fetch("/api/doctors");
+        const res = await fetch("/api/doctor");
         const data = await res.json();
         setDoctors(data.doctors);
         setFiltered(data.doctors);
@@ -114,7 +114,7 @@ export default function DoctorListPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="input w-full md:w-48"
+            className="w-full md:w-48"
           >
             <option value="all">All Status</option>
             <option value="active">Active</option>

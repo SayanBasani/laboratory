@@ -7,7 +7,14 @@ export async function POST(req: Request) {
     data: {
       patientId: body.patientId,
       doctorId: body.doctorId,
-      problem: body.problem,
+      reason: body.reason,
+      notes: body.notes,
+      scheduledAt: body.scheduledAt,
+      duration: body.duration,
+      status: body.status,
+      mode: body.mode,
+      fee: body.fee,
+      paid: body.paid,
     },
   });
 

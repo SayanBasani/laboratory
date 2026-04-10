@@ -77,7 +77,7 @@ export default function Home() {
           </CardContent>
         </Card>
         
-        <Link href={'/patient/list'}>
+        <Link href={'/patient'}>
           <Card className="bg-gray-100 dark:bg-slate-900 hover:scale-105 transition">
             <CardContent className="p-6 text-center">
               <FileText className="mx-auto mb-4" />

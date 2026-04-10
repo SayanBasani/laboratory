@@ -28,6 +28,9 @@ model Patient {
   gender String
   phone String
   address String
+
+  appointments Appointment[]
+
 }
 
 model Doctor {
@@ -51,8 +54,33 @@ model Appointment {
   patientId Int
   doctorId  Int
 
-  problem   String
-  date      DateTime @default(now())
+  reason    String
+  notes     String?
 
-  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  scheduledAt DateTime
+  duration    Int?
+
+  status   AppointmentStatus @default(SCHEDULED)
+  mode     AppointmentMode   @default(OFFLINE)
+
+  fee      Float?
+  paid     Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctor  Doctor  @relation(fields: [doctorId], references: [id])
+  patient Patient @relation(fields: [patientId], references: [id])
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum AppointmentMode {
+  ONLINE
+  OFFLINE
 }

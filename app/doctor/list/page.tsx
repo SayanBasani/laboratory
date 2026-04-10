@@ -22,10 +22,14 @@ export default function DoctorListPage() {
     const fetchDoctors = async () => {
       try {
         const res = await fetch("/api/doctor");
+        if (!res.ok) {
+          console.error("API ERROR:", res.status);
+          return;
+        }
         const data = await res.json();
-        
-        setDoctors(data);
-        setFiltered(data);
+        console.log(data.doctors);
+        setDoctors(data.doctors);
+        setFiltered(data.doctors);
       } catch (err) {
         console.error(err);
       } finally {
@@ -68,7 +72,7 @@ export default function DoctorListPage() {
       <div className="flex justify-between mb-6">
         <h1 className="text-2xl font-bold">Doctor Management</h1>
 
-        <Link href="/doctor/add">
+        <Link href="/doctor/registation">
           <button className="bg-blue-600 text-white px-4 py-2 rounded">
             + Add Doctor
           </button>
@@ -91,7 +95,7 @@ export default function DoctorListPage() {
       ) : (
         <table className="w-full border">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-gray-100 dark:bg-gray-800">
               <th className="p-3">Name</th>
               <th className="p-3">Specialization</th>
               <th className="p-3">Experience</th>

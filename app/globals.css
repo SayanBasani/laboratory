@@ -1,3 +1,13 @@
+.a{
+  border: 2px solid black;  border-radius: 10px;
+}
+.b{
+  border: 2px solid red;  border-radius: 10px;
+}
+.c{
+  border: 2px solid green;  border-radius: 10px;
+}
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";

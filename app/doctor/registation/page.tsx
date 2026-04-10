@@ -39,7 +39,7 @@ export default function DoctorRegister() {
   const onSubmit = async (data: FormData) => {
     console.log(data);
     try {
-      const res = await fetch("/api/doctors/registation", {
+      const res = await fetch("/api/doctor/registation", {
         method: "POST",
         body: JSON.stringify(data),
       });

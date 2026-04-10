@@ -1,12 +1,8 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 type Doctor = {
@@ -15,16 +11,22 @@ type Doctor = {
 };
 
 type FormData = {
-  problem: string;
+  reason: string;
+  notes?: string;
   doctorId: string;
+  scheduledAt: string;
+  duration?: number;
+  status: string;
+  mode: string;
+  fee?: number;
+  paid: boolean;
 };
 
 export default function AppointmentPage() {
-  const { id } = useParams(); // patientId
+  const { id } = useParams();
   const router = useRouter();
 
   const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [loadingDoctors, setLoadingDoctors] = useState(true);
 
   const {
     register,
@@ -32,132 +34,176 @@ export default function AppointmentPage() {
     formState: { errors, isSubmitting },
   } = useForm<FormData>();
 
-  // ✅ Fetch Doctors
+  // 🔥 Fetch Doctors
   useEffect(() => {
     const fetchDoctors = async () => {
-      try {
-        const res = await fetch("/api/doctors");
-        const data = await res.json();
-        setDoctors(data.doctors);
-      } catch (err) {
-        console.error("Failed to fetch doctors");
-      } finally {
-        setLoadingDoctors(false);
-      }
+      const res = await fetch("/api/doctor");
+      const data = await res.json();
+      setDoctors(data.doctors);
     };
 
     fetchDoctors();
   }, []);
 
-  // ✅ Submit Appointment
+  // 🚀 Submit
   const onSubmit = async (data: FormData) => {
     try {
       const res = await fetch("/api/appointment", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           patientId: Number(id),
           doctorId: Number(data.doctorId),
-          problem: data.problem,
+          reason: data.reason,
+          notes: data.notes,
+          scheduledAt: new Date(data.scheduledAt),
+          duration: Number(data.duration),
+          status: data.status,
+          mode: data.mode,
+          fee: Number(data.fee),
+          paid: data.paid,
         }),
       });
 
       if (!res.ok) throw new Error("Failed");
 
-      const result = await res.json();
-
-      // 🔥 Redirect to next step (you can change later)
-      router.push(`/`);
+      router.push(`/patient/${id}`);
     } catch (err) {
       console.error(err);
-      alert("Something went wrong");
+      alert("Failed to create appointment");
     }
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-white to-gray-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-6">
+    <main className="min-h-screen bg-gray-50 dark:bg-slate-950 p-6">
 
-      {/* BACK */}
-      <Link href="/" className="absolute top-6 left-6">
-        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:opacity-80">
-          <ArrowLeft size={18} />
-          Back
+      <div className="max-w-5xl mx-auto">
+
+        {/* HEADER */}
+        <div className="flex justify-between items-center mb-6">
+          <Link href={`/patient/${id}`} className="text-blue-600">
+            ← Back
+          </Link>
+
+          <h1 className="text-2xl font-bold">
+            Create Appointment
+          </h1>
         </div>
-      </Link>
 
-      {/* CARD */}
-      <Card className="w-full max-w-2xl shadow-xl rounded-2xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800">
-        <CardContent className="p-8">
+        {/* FORM */}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow space-y-6"
+        >
 
-          {/* TITLE */}
-          <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold">Assign Doctor</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Add patient problem and assign a doctor
-            </p>
-          </div>
+          {/* GRID */}
+          <div className="grid md:grid-cols-2 gap-6">
 
-          {/* FORM */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
-            {/* PROBLEM */}
+            {/* REASON */}
             <div>
-              <label className="text-sm mb-1 block">Patient Problem</label>
-              <textarea
-                {...register("problem", {
-                  required: "Problem is required",
-                })}
-                placeholder="Enter patient problem"
-                rows={4}
-                className="w-full p-3 rounded-xl border bg-gray-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <label className="label">Reason</label>
+              <input
+                {...register("reason", { required: true })}
+                className="input"
+                placeholder="Enter reason"
               />
-              {errors.problem && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.problem.message}
-                </p>
-              )}
             </div>
 
-            {/* DOCTOR DROPDOWN */}
+            {/* DOCTOR */}
             <div>
-              <label className="text-sm mb-1 block">Select Doctor</label>
-
-              <select
-                {...register("doctorId", {
-                  required: "Please select a doctor",
-                })}
-                className="w-full p-3 rounded-xl border bg-gray-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">
-                  {loadingDoctors ? "Loading doctors..." : "Select Doctor"}
-                </option>
-
+              <label className="label">Doctor</label>
+              <select {...register("doctorId", { required: true })} className="input">
+                <option value="">Select Doctor</option>
                 {doctors.map((doc) => (
                   <option key={doc.id} value={doc.id}>
                     {doc.name}
                   </option>
                 ))}
               </select>
-
-              {errors.doctorId && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.doctorId.message}
-                </p>
-              )}
             </div>
 
-            {/* SUBMIT */}
-            <Button
-              disabled={isSubmitting}
-              className="w-full py-3 text-lg bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
-            >
-              {isSubmitting ? "Saving..." : "Assign Doctor"}
-            </Button>
+            {/* DATE */}
+            <div>
+              <label className="label">Schedule Date</label>
+              <input
+                type="datetime-local"
+                {...register("scheduledAt", { required: true })}
+                className="input"
+              />
+            </div>
 
-          </form>
+            {/* DURATION */}
+            <div>
+              <label className="label">Duration (minutes)</label>
+              <input
+                type="number"
+                {...register("duration")}
+                className="input"
+              />
+            </div>
 
-        </CardContent>
-      </Card>
+            {/* MODE */}
+            <div>
+              <label className="label">Mode</label>
+              <select {...register("mode")} className="input">
+                <option value="OFFLINE">Offline</option>
+                <option value="ONLINE">Online</option>
+              </select>
+            </div>
 
+            {/* STATUS */}
+            <div>
+              <label className="label">Status</label>
+              <select {...register("status")} className="input">
+                <option value="SCHEDULED">Scheduled</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+                <option value="NO_SHOW">No Show</option>
+              </select>
+            </div>
+
+            {/* FEE */}
+            <div>
+              <label className="label">Consultation Fee</label>
+              <input
+                type="number"
+                {...register("fee")}
+                className="input"
+              />
+            </div>
+
+            {/* PAID */}
+            <div className="flex items-center gap-2 mt-6">
+              <input type="checkbox" {...register("paid")} />
+              <label>Payment Completed</label>
+            </div>
+
+          </div>
+
+          {/* NOTES */}
+          <div>
+            <label className="label">Notes</label>
+            <textarea
+              {...register("notes")}
+              className="input"
+              rows={3}
+              placeholder="Optional notes..."
+            />
+          </div>
+
+          {/* BUTTON */}
+          <button
+            disabled={isSubmitting}
+            className="w-full bg-blue-600 text-white py-3 rounded-xl"
+          >
+            {isSubmitting ? "Saving..." : "Create Appointment"}
+          </button>
+
+        </form>
+
+      </div>
     </main>
   );
 }

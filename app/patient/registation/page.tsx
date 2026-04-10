@@ -52,13 +52,12 @@ export default function RegisterPatient() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-white to-gray-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-6">
+    <main className="min-h-[calc(100vh-64px)] bg-gradient-to-br from-white to-gray-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-6">
 
       {/* BACK BUTTON */}
       <Link href="/" className="absolute top-6 left-6">
         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:opacity-80">
-          <ArrowLeft size={18} />
-          Back
+          <ArrowLeft size={18} /> Back
         </div>
       </Link>
 
