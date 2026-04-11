@@ -180,6 +180,10 @@ export default function DoctorListPage() {
                     {/* ACTIONS */}
                     <td className="p-4 flex gap-3">
 
+                      <Link href={`/doctor/${doc.id}`}>
+                        <button className="text-blue-600">View</button>
+                      </Link>
+
                       <Link href={`/doctor/edit/${doc.id}`}>
                         <button className="text-blue-600 hover:underline">
                           Edit

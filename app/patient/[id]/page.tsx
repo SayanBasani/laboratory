@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
+import { File, Package } from "lucide-react";
 
 type Patient = {
   id: number;
@@ -65,8 +66,10 @@ export default function PatientDetailPage() {
         setPatient(patientData.patient);
 
         // Appointments
-        const res2 = await fetch(`/api/appointment/${id}`);
+        const res2 = await fetch(`/api/appointment/patient/${id}`);
         const apptData = await res2.json();
+        console.log("apptData");
+        console.log(apptData);
         setAppointments(apptData.appointments);
 
       } catch (err) {
@@ -109,7 +112,6 @@ export default function PatientDetailPage() {
 
   return (
     <main className="bg-gray-50 dark:bg-slate-950 min-h-screen p-6">
-
       <div className="max-w-6xl mx-auto space-y-6">
 
         {/* 🔙 HEADER ACTIONS */}
@@ -209,7 +211,7 @@ export default function PatientDetailPage() {
                     key={appt.id}
                     className="p-4 border rounded-xl flex justify-between items-center"
                   >
-                    <div>
+                    <div className="cursor-pointer">
                       <Link href={`/doctor/${appt.doctor?.id}`}>
                           <p className="font-medium">
                               Dr. {appt.doctor?.name}
@@ -226,9 +228,33 @@ export default function PatientDetailPage() {
                       )}
                     </div>
 
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                      Assigned
-                    </span>
+                    <div className="flex flex-col gap-2 items-end">
+
+                      {/* ACTION LABEL */}
+                      <p className="text-xs text-gray-400 mb-1">Actions</p>
+
+                      {/* ACTION BUTTONS */}
+                      <div className="flex gap-2">
+
+                        {/* DOCTOR REPORT */}
+                        <Link href={`/doctor-report/${appt.id}`}>
+                          <button className="cursor-pointer flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition">
+                            <File size={14} />
+                            Doctor Report
+                          </button>
+                        </Link>
+
+                        {/* TEST REPORT */}
+                        <Link href={`/test-entry/${appt.id}`}>
+                          <button className="cursor-pointer flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition">
+                            <File size={14} />
+                            Test Report
+                          </button>
+                        </Link>
+
+                      </div>
+
+                    </div>
                   </div>
                 ))}
               </div>

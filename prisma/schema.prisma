@@ -71,6 +71,7 @@ model Appointment {
 
   doctor  Doctor  @relation(fields: [doctorId], references: [id])
   patient Patient @relation(fields: [patientId], references: [id])
+  testResult TestResult[]
 }
 
 enum AppointmentStatus {
@@ -83,4 +84,39 @@ enum AppointmentStatus {
 enum AppointmentMode {
   ONLINE
   OFFLINE
+}
+
+
+// for tests 
+
+model TestType {
+  id     Int    @id @default(autoincrement())
+  name   String
+
+  fields TestField[]
+  testResults TestResult[]
+}
+
+model TestField {
+  id         Int    @id @default(autoincrement())
+  name       String
+  unit       String?
+  normalRange String?
+
+  testTypeId Int
+  testType   TestType @relation(fields: [testTypeId], references: [id])
+}
+
+model TestResult {
+  id            Int      @id @default(autoincrement())
+
+  appointmentId Int
+  testTypeId    Int
+
+  createdAt     DateTime @default(now())
+
+  values        Json   // dynamic values
+
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  testType      TestType   @relation(fields: [testTypeId], references: [id])
 }

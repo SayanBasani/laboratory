@@ -1,6 +1,8 @@
 // Helping link of gpt gmail sayanbasani1
 // https://chatgpt.com/c/69c4b5f8-bb20-8320-985d-7786076bb66a
 
+// https://chatgpt.com/c/69d79a56-9e6c-8321-9364-99622d8dbeab
+
 // app/page.tsx
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,12 +13,6 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="min-h-screen bg-white text-black dark:bg-slate-950 dark:text-white transition-colors duration-300">
-      
-      {/* NAVBAR */}
-      <div className="flex justify-between items-center p-6">
-        <h1 className="text-xl font-bold">Lab System</h1>
-        <ThemeToggle />
-      </div>
 
       {/* HERO */}
       <section className="text-center py-24 px-6">
@@ -56,19 +52,23 @@ export default function Home() {
           </Card>
         </Link>
 
-        <Card className="bg-gray-100 dark:bg-slate-900 hover:scale-105 transition">
-          <CardContent className="p-6 text-center">
-            <Activity className="mx-auto mb-4" />
-            <h3 className="text-lg font-semibold">Add Test</h3>
-          </CardContent>
-        </Card>
+        <Link href={'/test'}>
+          <Card className="bg-gray-100 dark:bg-slate-900 hover:scale-105 transition">
+            <CardContent className="p-6 text-center">
+              <Activity className="mx-auto mb-4" />
+              <h3 className="text-lg font-semibold">Add New Test</h3>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="bg-gray-100 dark:bg-slate-900 hover:scale-105 transition">
-          <CardContent className="p-6 text-center">
-            <Calendar className="mx-auto mb-4" />
-            <h3 className="text-lg font-semibold">Appointments</h3>
-          </CardContent>
-        </Card>
+        <Link href={'/appoinment'}>
+          <Card className="bg-gray-100 dark:bg-slate-900 hover:scale-105 transition">
+            <CardContent className="p-6 text-center">
+              <Calendar className="mx-auto mb-4" />
+              <h3 className="text-lg font-semibold">Appointments</h3>
+            </CardContent>
+          </Card>
+        </Link>
 
         <Card className="bg-gray-100 dark:bg-slate-900 hover:scale-105 transition">
           <CardContent className="p-6 text-center">

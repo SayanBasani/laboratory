@@ -20,3 +20,27 @@ export async function POST(req: Request) {
 
   return Response.json(appointment);
 }
+
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const doctorId = searchParams.get("doctorId");
+    const appointments = await prisma.appointment.findMany({
+      where: doctorId ? {
+        doctorId: Number(doctorId),
+      } : {},
+      include: {
+        patient: true,
+        doctor: true,
+      },
+      orderBy: {
+        scheduledAt: "desc",
+      },
+    });
+
+    return Response.json(appointments);
+  } catch (error) {
+    console.error("Error fetching appointments:", error);
+    return Response.json({ error: "Failed to fetch appointments" }, { status: 500 });
+  }
+}

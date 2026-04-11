@@ -6,16 +6,14 @@ export async function GET(
 ) {
   try {
     const { id } = await context.params;
-    const appoinment = await prisma.appointment.findUnique({
-      where: { id: Number(id) },
+    const appoinments = await prisma.appointment.findMany({
+      where: { patientId: Number(id) },
       include : {
         doctor: true,
         patient: true,
       }
     });
-    console.log("appoinment :- ")
-    console.log(appoinment)
-    return Response.json({appointment: appoinment});
+    return Response.json({appointments: appoinments});
   } catch (error) {
     console.error(error);
     return Response.json(

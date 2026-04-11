@@ -5,27 +5,27 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-type Patient = {
+type TestType = {
   id: number;
   name: string;
-  age: number;
-  phone: string;
+  fields: { id: number }[];
+  createdAt: string;
 };
 
-export default function PatientListPage() {
-  const [patients, setPatients] = useState<Patient[]>([]);
-  const [filtered, setFiltered] = useState<Patient[]>([]);
+export default function TestListPage() {
+  const [tests, setTests] = useState<TestType[]>([]);
+  const [filtered, setFiltered] = useState<TestType[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // fetch patients
+  // fetch tests
   useEffect(() => {
-    const fetchPatients = async () => {
+    const fetchTests = async () => {
       try {
-        const res = await fetch("/api/patient");
+        const res = await fetch("/api/test");
         const data = await res.json();
-        setPatients(data.patient);
-        setFiltered(data.patient);
+        setTests(data);
+        setFiltered(data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -33,29 +33,28 @@ export default function PatientListPage() {
       }
     };
 
-    fetchPatients();
+    fetchTests();
   }, []);
 
-  // search filter
+  // filter
   useEffect(() => {
-    const result = patients.filter((p) =>
-      p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.phone.includes(search)
+    const result = tests.filter((t) =>
+      t.name.toLowerCase().includes(search.toLowerCase())
     );
     setFiltered(result);
-  }, [search, patients]);
+  }, [search, tests]);
 
   // delete
   const handleDelete = async (id: number) => {
-    if (!confirm("Delete this patient?")) return;
+    if (!confirm("Delete this test?")) return;
 
     try {
-      await fetch(`/api/patient/${id}`, {
+      await fetch(`/api/test/${id}`, {
         method: "DELETE",
       });
 
-      setPatients((prev) => prev.filter((p) => p.id !== id));
-    } catch (err) {
+      setTests((prev) => prev.filter((t) => t.id !== id));
+    } catch {
       alert("Delete failed");
     }
   };
@@ -66,15 +65,15 @@ export default function PatientListPage() {
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold">Patient Management</h1>
+          <h1 className="text-3xl font-bold">Test Management</h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Manage all registered patients
+            Manage all lab test types
           </p>
         </div>
 
-        <Link href="/patient/registation">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-            + Add Patient
+        <Link href="/test/create">
+          <Button className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white">
+            + Create Test
           </Button>
         </Link>
       </div>
@@ -83,7 +82,7 @@ export default function PatientListPage() {
       <Card className="mb-6 bg-white/70 dark:bg-slate-900 backdrop-blur">
         <CardContent className="p-4">
           <input
-            placeholder="Search by name or phone..."
+            placeholder="Search test..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="input w-full"
@@ -96,59 +95,59 @@ export default function PatientListPage() {
         <CardContent className="p-0 overflow-x-auto">
 
           {loading ? (
-            <div className="p-6 text-center">Loading patients...</div>
+            <div className="p-6 text-center">Loading tests...</div>
           ) : filtered.length === 0 ? (
             <div className="p-6 text-center text-gray-500">
-              No patients found
+              No tests found
             </div>
           ) : (
             <table className="w-full text-sm">
 
               <thead className="bg-gray-100 dark:bg-slate-800">
                 <tr>
-                  <th className="p-4 text-left">Name</th>
-                  <th className="p-4 text-left">Age</th>
-                  <th className="p-4 text-left">Phone</th>
+                  <th className="p-4 text-left">Test Name</th>
+                  <th className="p-4 text-left">Fields</th>
+                  <th className="p-4 text-left">Created</th>
                   <th className="p-4 text-left">Actions</th>
                 </tr>
               </thead>
 
               <tbody>
-                {filtered.map((p) => (
+                {filtered.map((test) => (
                   <tr
-                    key={p.id}
+                    key={test.id}
                     className="border-t hover:bg-gray-50 dark:hover:bg-slate-800 transition"
                   >
-                    <td className="p-4 font-medium">{p.name}</td>
-                    <td className="p-4">{p.age}</td>
-                    <td className="p-4">{p.phone}</td>
+                    <td className="p-4 font-medium">{test.name}</td>
+
+                    <td className="p-4">
+                      {test.fields.length} fields
+                    </td>
+
+                    <td className="p-4">
+                      {new Date(test.createdAt).toLocaleDateString()}
+                    </td>
 
                     <td className="p-4 flex gap-3">
 
-                      <Link href={`/patient/${p.id}`}>
+                      <Link href={`/test/${test.id}`}>
                         <button className="text-blue-600 hover:underline">
                           View
                         </button>
                       </Link>
 
-                      <Link href={`/patient/edit/${p.id}`}>
+                      <Link href={`/test/edit/${test.id}`}>
                         <button className="text-yellow-600 hover:underline">
                           Edit
                         </button>
                       </Link>
 
                       <button
-                        onClick={() => handleDelete(p.id)}
+                        onClick={() => handleDelete(test.id)}
                         className="text-red-600 hover:underline"
                       >
                         Delete
                       </button>
-
-                      <Link href={`/patient/appointment/${p.id}`}>
-                        <button className="text-green-600 hover:underline">
-                          Assign
-                        </button>
-                      </Link>
 
                     </td>
 

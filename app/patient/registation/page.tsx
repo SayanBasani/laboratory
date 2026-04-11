@@ -52,7 +52,7 @@ export default function RegisterPatient() {
   };
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-gradient-to-br from-white to-gray-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-6">
+    <main className="min-h-[calc(100vh-64px)] bg-linear-to-br from-white to-gray-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-6">
 
       {/* BACK BUTTON */}
       <Link href="/" className="absolute top-6 left-6">

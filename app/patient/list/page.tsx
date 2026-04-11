@@ -72,7 +72,7 @@ export default function PatientListPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-white to-gray-100 dark:from-slate-950 dark:to-slate-900 p-6">
+    <main className="min-h-screen bg-linear-to-br from-white to-gray-100 dark:from-slate-950 dark:to-slate-900 p-6">
 
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
