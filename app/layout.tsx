@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,8 +39,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header/>
-          <div className="">
-            {children}
+          <div className="flex">
+            <Sidebar />
+            <main className="flex-1 overflow-y-auto h-[calc(100vh-64px)] w-full">
+              {children}
+            </main>
           </div>
         </ThemeProvider>
       </body>

@@ -6,7 +6,7 @@ export default function Header(){
     return(
       <header className="sticky top-0 z-50 w-full bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
         <Link href="/">
-          <h1 className="text-xl font-bold flex gap-2">
+          <h1 className="text-xl font-bold flex gap-2 cursor-pointer">
             <Hospital/> Hospital System
           </h1>
         </Link>

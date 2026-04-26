@@ -222,8 +222,10 @@ export default function PatientDetailPage() {
                       </p>
 
                       {appt.createdAt && (
-                        <p className="text-xs text-gray-400">
-                          {new Date(appt.scheduledAt).toLocaleDateString()}
+                        <p className="text-xs text-gray-400" 
+                        style={{color: (new Date(appt.scheduledAt).getTime() > new Date().getTime()) ? "green" : (appt.status == "COMPLETED" ? "blue" : "red") }}
+                        >
+                          {new Date(appt.scheduledAt).toLocaleString()}
                         </p>
                       )}
                     </div>

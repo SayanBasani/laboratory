@@ -27,6 +27,31 @@ export default function RegisterPatient() {
     });
   };
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   console.log("Patient Data:", form);
+  //   try{
+  //     const res = await fetch("/api/patient/registation", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(form),
+  //     });
+
+  //     if(!res.ok) throw new Error("Failed to save user");
+  //     const result = await res.json();
+  //     alert('User saved!');
+  //     router.push(`/patient/appointment/${result.id}`);
+  //   }catch(error){
+  //     console.log(error);
+  //     alert('Failed to save user');
+  //   }
+
+  // };
+  
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -39,14 +64,14 @@ export default function RegisterPatient() {
         },
         body: JSON.stringify(form),
       });
+      const data = await res.json();
 
-      if(!res.ok) throw new Error("Failed to save user");
-      const result = await res.json();
+      if(!res.ok) throw new Error(data.message || "Something went wrong");
       alert('User saved!');
-      router.push(`/patient/appointment/${result.id}`);
-    }catch(error){
+      router.push(`/patient/appointment/${data.id}`);
+    }catch(error: any){
       console.log(error);
-      alert('Failed to save user');
+      alert(error.message);
     }
 
   };
