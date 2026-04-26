@@ -1,0 +1,182 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+
+type Report = {
+  id: number;
+  patientName: string;
+  patientAge: number;
+  patientGender: string;
+  patientPhone: string;
+  doctorName: string;
+  doctorSpecialization: string;
+  testTypeId: number;
+  values: Record<string, string>;
+  createdAt: string;
+};
+
+type TestType = {
+  id: number;
+  name: string;
+  fields: {
+    id: number;
+    name: string;
+    unit?: string;
+    normalRange?: string;
+  }[];
+};
+
+export default function ReportDetailPage() {
+  const { id } = useParams();
+
+  const [report, setReport] = useState<Report | null>(null);
+  const [test, setTest] = useState<TestType | null>(null);
+
+  // 📡 Fetch data
+  useEffect(() => {
+    fetch(`/api/report/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setReport(data);
+
+        fetch(`/api/test/${data.testTypeId}`)
+          .then((res) => res.json())
+          .then(setTest);
+      });
+  }, [id]);
+
+  // 📄 PDF DOWNLOAD (FIXED)
+  const downloadPDF = async () => {
+    const html2pdf = (await import("html2pdf.js")).default;
+
+    const element = document.getElementById("report-content");
+    if (!element) return;
+
+    html2pdf()
+      .set({
+        margin: 0.3,
+        filename: `report-${report?.id}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+      })
+      .from(element)
+      .save();
+  };
+
+  if (!report || !test) return <div className="p-6">Loading...</div>;
+
+  return (
+    <main className="min-h-screen bg-gray-100 p-6">
+
+      <div className="max-w-4xl mx-auto space-y-4">
+
+        {/* ACTION BUTTONS */}
+        <div className="flex gap-3 print:hidden">
+          <button
+            onClick={() => window.print()}
+            className="btn-primary w-full"
+          >
+            Print
+          </button>
+
+          <button
+            onClick={downloadPDF}
+            className="btn-success w-full"
+          >
+            Download PDF
+          </button>
+        </div>
+
+        {/* REPORT CONTENT */}
+        <div
+          id="report-content"
+          className="report-only bg-white p-8 rounded shadow text-sm text-black"
+        >
+
+          {/* HEADER */}
+          <div className="text-center border-b pb-4">
+            <h1 className="text-2xl font-bold">YOUR LAB NAME</h1>
+            <p className="text-gray-600">
+              Diagnostic & Pathology Center
+            </p>
+            <p className="text-xs text-gray-500">
+              Address • Phone • Email
+            </p>
+          </div>
+
+          {/* PATIENT + DOCTOR */}
+          <div className="grid grid-cols-2 gap-6 mt-6">
+
+            <div>
+              <h2 className="font-semibold border-b mb-2">
+                Patient Details
+              </h2>
+              <p><strong>Name:</strong> {report.patientName}</p>
+              <p><strong>Age:</strong> {report.patientAge}</p>
+              <p><strong>Gender:</strong> {report.patientGender}</p>
+              <p><strong>Phone:</strong> {report.patientPhone}</p>
+            </div>
+
+            <div>
+              <h2 className="font-semibold border-b mb-2">
+                Doctor Details
+              </h2>
+              <p><strong>Name:</strong> {report.doctorName}</p>
+              <p><strong>Specialization:</strong> {report.doctorSpecialization}</p>
+              <p>
+                <strong>Date:</strong>{" "}
+                {new Date(report.createdAt).toLocaleDateString()}
+              </p>
+            </div>
+
+          </div>
+
+          {/* TEST NAME */}
+          <div className="mt-6">
+            <h2 className="text-lg font-semibold border-b pb-2">
+              {test.name}
+            </h2>
+          </div>
+
+          {/* TABLE */}
+          <table className="w-full mt-4 border text-sm">
+
+            <thead className="bg-gray-200">
+              <tr>
+                <th className="p-2 text-left">Parameter</th>
+                <th className="p-2 text-left">Result</th>
+                <th className="p-2 text-left">Unit</th>
+                <th className="p-2 text-left">Reference Range</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {test.fields.map((f) => {
+                const key = `field_${f.id}`;
+                return (
+                  <tr key={f.id} className="border-t">
+                    <td className="p-2 font-medium">{f.name}</td>
+                    <td className="p-2">{report.values?.[key] || "-"}</td>
+                    <td className="p-2">{f.unit || "-"}</td>
+                    <td className="p-2">{f.normalRange || "-"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+
+          </table>
+
+          {/* FOOTER */}
+          <div className="mt-10 border-t pt-4 flex justify-between text-xs text-gray-600">
+            <p>Generated by Lab System</p>
+            <p>Authorized Signature</p>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+  );
+}

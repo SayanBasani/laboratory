@@ -68,7 +68,7 @@ export default function DoctorListPage() {
     if (!confirmDelete) return;
 
     try {
-      await fetch(`/api/doctors/${id}`, {
+      await fetch(`/api/doctor/${id}`, {
         method: "DELETE",
       });
 

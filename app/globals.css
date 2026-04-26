@@ -1,3 +1,7 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
 .a{
   border: 2px solid black;  border-radius: 10px;
 }
@@ -8,9 +12,6 @@
   border: 2px solid green;  border-radius: 10px;
 }
 
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -140,7 +141,7 @@
 }
 
 
-/* manually add during doctor registation */
+/* custom utility classes */
 .input {
   @apply w-full p-3 rounded-xl border bg-gray-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500;
 }
@@ -152,5 +153,46 @@
 .label {
   @apply text-sm mb-1 block text-gray-600 dark:text-gray-300;
 }
-/* !! */
 
+.card {
+  @apply bg-white dark:bg-slate-800 p-5 rounded-xl shadow space-y-4;
+}
+
+.section-title {
+  @apply font-semibold text-lg;
+}
+
+.dropdown {
+  @apply absolute z-10 w-full bg-white border rounded-lg shadow mt-1;
+}
+
+.dropdown-item {
+  @apply p-2 hover:bg-gray-100 cursor-pointer;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700;
+}
+
+.btn-success {
+  @apply bg-green-600 text-white p-3 rounded-xl hover:bg-green-700;
+}
+
+/* PRINT FIX */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #report-content,
+  #report-content * {
+    visibility: visible;
+  }
+
+  #report-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

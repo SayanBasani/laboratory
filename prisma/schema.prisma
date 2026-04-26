@@ -69,8 +69,8 @@ model Appointment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  doctor  Doctor  @relation(fields: [doctorId], references: [id])
-  patient Patient @relation(fields: [patientId], references: [id])
+  doctor  Doctor  @relation(fields: [doctorId], references: [id] , onDelete: Cascade)
+  patient Patient @relation(fields: [patientId], references: [id] , onDelete: Cascade)
   testResult TestResult[]
 }
 
@@ -117,6 +117,28 @@ model TestResult {
 
   values        Json   // dynamic values
 
-  appointment   Appointment @relation(fields: [appointmentId], references: [id])
-  testType      TestType   @relation(fields: [testTypeId], references: [id])
+  appointment   Appointment @relation(fields: [appointmentId], references: [id] , onDelete: Cascade)
+  testType      TestType   @relation(fields: [testTypeId], references: [id] , onDelete: Cascade)
+}
+
+// for Report
+
+model Report {
+  id Int @id @default(autoincrement())
+
+  patientId Int?
+  doctorId Int?
+
+  patientName String
+  patientAge Int?
+  patientGender String?
+  patientPhone String?
+
+  doctorName String?
+  doctorSpecialization String?
+
+  testTypeId Int
+  values Json
+
+  createdAt DateTime @default(now())
 }

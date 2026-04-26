@@ -38,8 +38,8 @@ export default function AppointmentPage() {
   useEffect(() => {
     const fetchDoctors = async () => {
       const res = await fetch("/api/doctor");
-      const data = await res.json();
-      setDoctors(data.doctors);
+      const doctors = await res.json();
+      setDoctors(doctors || []);
     };
 
     fetchDoctors();
@@ -116,7 +116,7 @@ export default function AppointmentPage() {
               <label className="label">Doctor</label>
               <select {...register("doctorId", { required: true })} className="input">
                 <option value="">Select Doctor</option>
-                {doctors.map((doc) => (
+                {doctors?.map((doc) => (
                   <option key={doc.id} value={doc.id}>
                     {doc.name}
                   </option>

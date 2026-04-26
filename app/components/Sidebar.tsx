@@ -11,7 +11,11 @@ import {
   Activity, 
   Calendar, 
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  StickyNote,
+  UserCheck,
+  ClipboardList,
+  FileText
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -21,14 +25,16 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   const menuItems = [
-    { name: "Dashboard", href: "/", icon: Home },
-    { name: "Register Patient", href: "/patient/registation", icon: UserPlus },
-    { name: "Patient List", href: "/patient", icon: Users },
-    { name: "Register Doctor", href: "/doctor/registation", icon: Stethoscope },
-    { name: "Doctor List", href: "/doctor", icon: Users },
-    { name: "Add Test", href: "/test", icon: Activity },
-    { name: "Appointments", href: "/appoinment", icon: Calendar },
-  ];
+  { name: "Dashboard", href: "/", icon: Home },
+  { name: "Register Patient", href: "/patient/registation", icon: UserPlus },
+  { name: "Patient List", href: "/patient", icon: Users },
+  { name: "Register Doctor", href: "/doctor/registation", icon: Stethoscope },
+  { name: "Doctor List", href: "/doctor", icon: UserCheck },
+  { name: "Add Test", href: "/test", icon: ClipboardList },
+  { name: "Create Report", href: "/report/create", icon: FileText },
+  { name: "Report List", href: "/report", icon: StickyNote },
+  { name: "Appointments", href: "/appoinment", icon: Calendar },
+];
 
   return (
     <aside
